@@ -1,0 +1,37 @@
+{
+  "name": "otag",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.1.1+sha1.09ada6cd05003e0ced25fb716f9fda4063ec2e3b",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@prisma/client": "5.14.0",
+    "lucide-react": "^0.378.0",
+    "next": "14.2.3",
+    "next-auth": "^4.24.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-youtube": "^10.1.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.18.1",
+    "@catppuccin/tailwindcss": "^0.1.6",
+    "@eslint-react/eslint-plugin": "^1.5.12",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.3",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "postcss": "^8",
+    "prisma": "^5.14.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
