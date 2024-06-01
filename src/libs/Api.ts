@@ -1,13 +1,16 @@
 import { env } from './env'
+import type { IAnimeProps } from './types'
 
 export async function getAnimeResponse(resource: string, query?: string) {
-  const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/${resource}?${query}`)
-  return await response(data)
+  const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/${resource}?${query}`).then(res => res.json())
+
+  return data.data
+  // return data.data as IAnimeProps
 }
 
 export async function getNestedAnimeResponse(resource: string, objectProperty: string) {
   const data = await getAnimeResponse(resource)
-  const mappingData = data.data.flatMap((items: { [x: string]: any }) => items[objectProperty])
+  const mappingData = data.flatMap((items: { [x: string]: any }) => items[objectProperty])
   return shuffle(mappingData)
 }
 
@@ -18,11 +21,6 @@ function shuffle([...data]) {
     [data[index], data[random]] = [data[random], data[index]]
   }
 
-  const result = { data: data.slice(0, 10) }
+  const result = data.slice(0, 10)
   return result
-}
-
-async function response(data: Response) {
-  const anime = await data.json()
-  return anime
 }

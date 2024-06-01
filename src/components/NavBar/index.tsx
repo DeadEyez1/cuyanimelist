@@ -1,14 +1,18 @@
 import Link from 'next/link'
 import InputSearch from './inputSearch'
-import UserActionButton from './UserActionButton'
+import { ThemeToggle } from './ThemeSwitch'
+import { UserMenu } from './UserMenu'
 
 export default function Navbar() {
   return (
-    <header className="bg-crust">
-      <div className="flex md:flex-row flex-col justify-between md:items-center gap-2 p-4">
+    <header className="">
+      <div className="flex md:flex-row flex-col justify-between md:items-center p-4">
         <Link href="/" className="font-bold text-xl">CuyAnimeList</Link>
-        <InputSearch />
-        <UserActionButton />
+        <div className='flex gap-2'>
+          <InputSearch />
+          <ThemeToggle />
+          <UserMenu />
+        </div>
       </div>
     </header>
   )

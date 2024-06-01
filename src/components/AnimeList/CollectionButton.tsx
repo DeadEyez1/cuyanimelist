@@ -1,15 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import type { IDatabase } from '@/libs/types'
 
-interface Database {
-  anime_mal_id: string
-  user_email: string
-  anime_image: string
-  anime_title: string
-}
-
-export default function CollectionButton({ anime_mal_id, user_email, anime_image, anime_title }: Database) {
+export default function CollectionButton({ anime_mal_id, user_email, anime_image, anime_title }: IDatabase) {
   const [isCreated, setIsCreated] = useState(false)
 
   async function handleCollection(event: any) {

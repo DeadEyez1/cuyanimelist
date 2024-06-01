@@ -2,15 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import type { IComment } from '@/libs/types'
 
-interface Comment {
-  anime_mal_id: string
-  user_email: string
-  username: string
-  anime_title: string
-}
-
-export default function CommentInput({ anime_mal_id, user_email, username, anime_title }: Comment) {
+export default function CommentInput({ anime_mal_id, user_email, username, anime_title }: IComment) {
   const [comment, setComment] = useState('')
   const [isCreated, setIsCreated] = useState(false)
 

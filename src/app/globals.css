@@ -2,16 +2,118 @@
 @tailwind components;
 @tailwind utilities;
 
-img {
-  transition: .3s ease all;
+@layer base {
+  :root {
+    --background: 220 23.077% 94.902%;
+    /* base */
+    --foreground: 233.793 16.022% 35.490%;
+    /* text */
+
+    --muted: 222.857 15.909% 82.745%;
+    /* surface0 */
+    --muted-foreground: 233.333 12.796% 41.373%;
+    /* subtext1 */
+
+    --popover: 220 23.077% 94.902%;
+    /* base */
+    --popover-foreground: 233.793 16.022% 35.490%;
+    /* text */
+
+    --card: 220 23.077% 94.902%;
+    /* base */
+    --card-foreground: 233.793 16.022% 35.490%;
+    /* text */
+
+    --border: 225 13.559% 76.863%;
+    /* surface1 */
+    --input: 225 13.559% 76.863%;
+    /* surface1 */
+
+    --primary: 21.975 99.184% 51.961%;
+    /* peach */
+    --primary-foreground: 220 23.077% 94.902%;
+    /* base */
+
+    --secondary: 222.857 15.909% 82.745%;
+    /* surface0 */
+    --secondary-foreground: 233.793 16.022% 35.490%;
+    /* text */
+
+    --accent: 222.857 15.909% 82.745%;
+    /* surface0 */
+    --accent-foreground: 233.793 16.022% 35.490%;
+    /* text */
+
+    --destructive: 347.077 86.667% 44.118%;
+    /* red */
+    --destructive-foreground: 220 21.951% 91.961%;
+    /* mantle */
+
+    --ring: 233.793 16.022% 35.490%;
+    /* text */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 231.818 23.404% 18.431%;
+    /* base */
+    --foreground: 227.442 68.254% 87.647%;
+    /* text */
+
+    --muted: 230.4 18.797% 26.078%;
+    /* surface0 */
+    --muted-foreground: 228 39.216% 80.000%;
+    /* subtext1 */
+
+    --popover: 231.818 23.404% 18.431%;
+    /* base */
+    --popover-foreground: 227.442 68.254% 87.647%;
+    /* text */
+
+    --card: 231.818 23.404% 18.431%;
+    /* base */
+    --card-foreground: 227.442 68.254% 87.647%;
+    /* text */
+
+    --border: 231.111 15.607% 33.922%;
+    /* surface1 */
+    --input: 231.111 15.607% 33.922%;
+    /* surface1 */
+
+    --primary: 21.356 85.507% 72.941%;
+    /* peach */
+    --primary-foreground: 231.818 23.404% 18.431%;
+    /* base */
+
+    --secondary: 230.4 18.797% 26.078%;
+    /* surface0 */
+    --secondary-foreground: 227.442 68.254% 87.647%;
+    /* text */
+
+    --accent: 230.4 18.797% 26.078%;
+    /* surface0 */
+    --accent-foreground: 227.442 68.254% 87.647%;
+    /* text */
+
+    --destructive: 351.176 73.913% 72.941%;
+    /* red */
+    --destructive-foreground: 233.333 23.077% 15.294%;
+    /* mantle */
+
+    --ring: 227.442 68.254% 87.647%;
+    /* text */
+
+    --radius: 0.5rem;
+  }
 }
 
 @layer base {
-  html,
-  body,
-  body > div:first-child,
-  div#__next,
-  div#__next > div {
-    @apply h-full bg-base text-text;
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
   }
 }

@@ -6,4 +6,8 @@ export default antfu({
     'style/brace-style': ['error', '1tbs', { allowSingleLine: true }],
     'style/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
   },
+  stylistic: {
+    indent: 2,
+    quotes: 'single',
+  },
 })

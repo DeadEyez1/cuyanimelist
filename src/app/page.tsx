@@ -8,14 +8,14 @@ export default async function Home() {
 
   return (
     <>
-      <section>
+      <section className='bg-destructive-foreground'>
         <Header title="Paling Populer" linkTitle="Lihat Semua" linkHref="/populer" />
         <AnimeList api={topAnime}></AnimeList>
       </section>
-      <section>
+      {/* <section>
         <Header title="Rekomendasi" />
         <AnimeList api={recommendedAnime}></AnimeList>
-      </section>
+      </section> */}
     </>
   )
 }

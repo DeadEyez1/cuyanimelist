@@ -3,7 +3,10 @@
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 
+// TODO make search autocomplete something like that
 export default function InputSearch() {
   const router = useRouter()
   const searchRef = useRef<HTMLInputElement>(null)
@@ -21,16 +24,17 @@ export default function InputSearch() {
 
   return (
     <div className="relative">
-      <input
+      <Input
         placeholder="Cari Anime..."
-        className="p-2 w-full rounded"
+        className="w-full rounded"
         ref={searchRef}
         onKeyDown={handleSearch}
-      />
+      >
+      </Input>
+      <Button variant="ghost" size="icon" className="absolute end-0 top-0" onClick={handleSearch}>
+        <Search />
+      </Button>
 
-      <button type="submit" className="absolute top-2 end-2" onClick={handleSearch}>
-        <Search size={24} color="blue" />
-      </button>
     </div>
   )
 }
