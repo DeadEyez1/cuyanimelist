@@ -5,8 +5,8 @@ import { UserMenu } from './UserMenu'
 
 export default function Navbar() {
   return (
-    <header className="">
-      <div className="flex md:flex-row flex-col justify-between md:items-center p-4">
+    <nav className="md:sticky top-0 z-50 bg-background/80 backdrop-blur">
+      <div className="flex md:flex-row flex-col justify-between md:items-center px-4 py-2">
         <Link href="/" className="font-bold text-xl">CuyAnimeList</Link>
         <div className='flex gap-2'>
           <InputSearch />
@@ -14,6 +14,6 @@ export default function Navbar() {
           <UserMenu />
         </div>
       </div>
-    </header>
+    </nav>
   )
 }

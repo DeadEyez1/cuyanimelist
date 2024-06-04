@@ -1,21 +1,18 @@
 import { getAnimeResponse, getNestedAnimeResponse } from '@/libs/Api'
-import AnimeList from '@/components/AnimeList'
 import Header from '@/components/AnimeList/Header'
+import AnimeCard from '@/components/AnimeList/AnimeCard'
+import { IAnimeProps } from '@/libs/types'
 
 export default async function Home() {
-  const topAnime = await getAnimeResponse('top/anime', 'limit=10')
-  const recommendedAnime = await getNestedAnimeResponse('recommendations/anime', 'entry')
+  const topAnime: IAnimeProps[] = await getAnimeResponse('top/anime', 'limit=12')
+  const airingAnime: IAnimeProps[] = await getAnimeResponse('top/anime', 'filter=airing&limit=12')
 
   return (
-    <>
-      <section className='bg-destructive-foreground'>
+    <section>
+      <div className='bg-destructive-foreground'>
         <Header title="Paling Populer" linkTitle="Lihat Semua" linkHref="/populer" />
-        <AnimeList api={topAnime}></AnimeList>
-      </section>
-      {/* <section>
-        <Header title="Rekomendasi" />
-        <AnimeList api={recommendedAnime}></AnimeList>
-      </section> */}
-    </>
+        <AnimeCard api={airingAnime}></AnimeCard>
+      </div>
+    </section>
   )
 }

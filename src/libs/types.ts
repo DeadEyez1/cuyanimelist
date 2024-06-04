@@ -7,12 +7,15 @@ export interface IAnimeProps {
   title: string
   type: string
   episodes: number
+  status: string
+  duration: string
   rating: string
   score: number
   rank: number
   synopsis: string
   year: number
   genres: IAnimeGenres[]
+  aired: IAired
 }
 
 interface IAnimeImages {
@@ -53,4 +56,22 @@ export interface IDatabase {
   user_email: string
   anime_image: string
   anime_title: string
+}
+
+interface IAired {
+  from: string
+  to: string
+  prop: {
+    from: {
+      date: number
+      month: number
+      year: number
+    }
+    to: {
+      date: number
+      month: number
+      year: number
+    }
+  }
+  string: string
 }
