@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 /* eslint-disable no-restricted-globals */
 import { PrismaClient } from '@prisma/client'
 

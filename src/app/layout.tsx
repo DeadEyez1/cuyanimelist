@@ -3,6 +3,7 @@ import { Figtree } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/NavBar'
 import { ThemeProvider } from '@/components/Utils/Theme'
+import Footer from '@/components/Footer'
 
 
 const inter = Figtree({ subsets: ['latin'] })
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Navbar />
           {children}
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   )

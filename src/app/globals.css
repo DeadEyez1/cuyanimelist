@@ -29,8 +29,8 @@
     --input: 225 13.559% 76.863%;
     /* surface1 */
 
-    --primary: 21.975 99.184% 51.961%;
-    /* peach */
+    --primary: 219.907 91.489% 53.922%;
+    /* blue */
     --primary-foreground: 220 23.077% 94.902%;
     /* base */
 
@@ -96,7 +96,8 @@
     --accent-foreground: 227.442 68.254% 87.647%;
     /* text */
 
-    --destructive: 351.176 73.913% 72.941%;
+    /* --destructive: 351.176 73.913% 72.941%; */
+    --destructive: 347.077 86.667% 44.118%;
     /* red */
     --destructive-foreground: 233.333 23.077% 15.294%;
     /* mantle */
@@ -116,4 +117,10 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

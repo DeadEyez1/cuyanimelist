@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { getAnimeResponse } from '@/libs/Api'
 import HeaderMenu from '@/components/Utils/HeaderMenu'
 import Pagination from '@/components/Utils/Pagination'
-import AnimeList from '@/components/AnimeList'
+import { AnimeCard } from '@/components/AnimeList/AnimeCard'
 
 export default function Populer() {
   const [page, setPage] = useState(1)
@@ -15,12 +15,13 @@ export default function Populer() {
 
   useEffect(() => {
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
 
   return (
     <>
       <HeaderMenu title={`ANIME POPULER #${page}`} />
-      <AnimeList api={topAnime} />
+      <AnimeCard api={topAnime} />
       <Pagination
         page={page}
         lastPage={topAnime.pagination?.last_visible_page}

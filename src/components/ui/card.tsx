@@ -77,11 +77,5 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-const CardImage = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { src: string, alt: string }
->(({ src, alt, className, ...props }, ref) => (
-  <Image src={src} alt={alt} className={className} width={300} height={250} {...props}></Image>
-))
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardImage }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

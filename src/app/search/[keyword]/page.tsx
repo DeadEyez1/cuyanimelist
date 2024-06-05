@@ -1,4 +1,4 @@
-import AnimeList from '@/components/AnimeList'
+import { AnimeCard } from '@/components/AnimeList/AnimeCard'
 import Header from '@/components/AnimeList/Header'
 import { getAnimeResponse } from '@/libs/Api'
 
@@ -10,7 +10,7 @@ export default async function Search({ params }: { params: { keyword: string } }
     <div>
       <section>
         <Header title={`Pencarian untuk ${decodeKeyword}`} />
-        <AnimeList api={searchAnime}></AnimeList>
+        <AnimeCard api={searchAnime}></AnimeCard>
       </section>
     </div>
   )

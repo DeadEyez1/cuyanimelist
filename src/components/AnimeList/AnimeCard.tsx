@@ -1,21 +1,21 @@
-import type { IAnimeProps } from '@/libs/types'
-import { Card, CardFooter, CardImage, CardTitle } from '../ui/card'
+import type { IAnimeProps, ICharacter } from '@/libs/types'
+import { Card, CardFooter, CardTitle } from '../ui/card'
 import Link from 'next/link'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
-import { Car, Clock2, Layers, Tv } from 'lucide-react'
+import { Clock2, Layers, Tv } from 'lucide-react'
 import Image from 'next/image'
 
 // TODO add link to genre
-export default function AnimeCard({ api }: { api: IAnimeProps[] }) {
+export function AnimeCard({ api }: { api: IAnimeProps[] }) {
   return (
     <div className='grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 grid-cols-2 gap-4 px-4'>
       {api.map((anime) => {
         return (
-          <HoverCard>
+          <HoverCard key={anime.mal_id} >
             <HoverCardContent side='right' align='start' className='w-80 bg-background/80 backdrop-blur'>
               <div className='text-sm'>
                 <p className='text-2xl font-semibold text-primary'>{anime.title}</p>
-                <p className=' py-3'>{anime.synopsis.substring(0, 350)} ...</p>
+                <p className=' py-3'>{anime.synopsis && anime.synopsis.substring(0, 350)} ...</p>
                 <p>Genre: {anime.genres.length > 1 ? anime.genres
                   .map<React.ReactNode>(genre => <span className='opacity-70 hover:opacity-100' key={genre.mal_id}>{genre.name}</span>)
                   .reduce((prev, curr) => [prev, ', ', curr])
@@ -27,34 +27,37 @@ export default function AnimeCard({ api }: { api: IAnimeProps[] }) {
                 <p>Status: {anime.status}</p>
               </div>
             </HoverCardContent>
-            <Card className='group/card hover:scale-105 hover:ease-in-out hover:transition-transform'>
-              <Link key={anime.mal_id} href={`/anime/${anime.mal_id}`}>
+            {/* <Card className='group/card hover:scale-105 hover:ease-in-out hover:transition size-auto w-36 h-60 aspect-[3/4]'> */}
+            <Card className='group/card hover:scale-105 hover:ease-in-out hover:transition size-auto aspect-[3/4]'>
+              <Link href={`/anime/${anime.mal_id}`}>
                 <HoverCardTrigger asChild>
-                  <Image
-                    src={anime.images.webp.image_url}
-                    alt="..."
-                    width={250}
-                    height={250}
-                    className="object-cover object-center rounded-lg aspect-[3/4]"
-                    priority
-                  />
+                  <div className='overflow-hidden rounded-lg'>
+                    <Image
+                      src={anime.images.webp.large_image_url}
+                      alt={anime.images.jpg.large_image_url}
+                      width={250}
+                      height={250}
+                      className="object-cover object-center aspect-[3/4] group-hover/card:scale-110 ease-in-out duration-300"
+                      priority
+                    />
+                  </div>
                 </HoverCardTrigger>
-                <CardTitle className='md:text-xl text-md group-hover/card:text-primary group-hover/card:underline px-2 py-1 truncate ...'>
+                <CardTitle className='md:text-base text-sm group-hover/card:text-primary group-hover/card:underline px-2 py-1 truncate group-hover/card:text-clip'>
                   {anime.title}
                 </CardTitle>
                 <CardFooter className='opacity-60 md:text-sm text-[12px] truncate gap-1'>
-                  <div className='flex items-center justify-center gap-1.5'>
-                    <Clock2 className='size-4 mb-0.5' />
+                  <div className='flex items-center justify-center gap-1.5 text-xs'>
+                    <Clock2 className='size-3' />
                     <p>{anime.duration.split("per ep")}</p>
                     {anime.type === "Movie"
                       ? <>
-                        <Tv className='size-4 mb-0.5'></Tv>
+                        <Tv className='size-3'></Tv>
                         <p>{anime.type}</p>
                       </>
                       : <>
-                        <Layers className='size-4 mb-0.5' />
+                        <Layers className='size-3' />
                         <p>{anime.episodes ? anime.episodes : "??"}</p>
-                        <Tv className='size-4 mb-1'></Tv>
+                        <Tv className='size-3'></Tv>
                         <p>{anime.type}</p>
                       </>
                     }
@@ -70,59 +73,62 @@ export default function AnimeCard({ api }: { api: IAnimeProps[] }) {
   )
 }
 
-
-/* 
-<div className='grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 grid-cols-2 gap-4 px-4'>
-      {api.map(anime => {
+export function AnimeCardHorizontal({ api }: { api: IAnimeProps[] }) {
+  return (
+    <div className='grid gap-4 px-4'>
+      {api.map((anime, index) => {
         return (
-          <HoverCard>
-            <Card className='group/card hover:scale-105 hover:ease-in-out hover:transition-transform'>
-              <Link key={anime.mal_id} href={`/anime/${anime.mal_id}`}>
-                <HoverCardTrigger>
-                  <CardImage
-                    src={anime.images.webp.large_image_url}
-                    alt={anime.images.jpg.large_image_url}
-                    className='object-cover object-center rounded-lg aspect-[3/4]'
-                  />
-                </HoverCardTrigger>
-                <CardTitle className='md:text-xl text-md group-hover/card:text-primary group-hover/card:underline px-2 py-1 truncate ...'>
-                  {anime.title}
-                </CardTitle>
-                <CardFooter className='opacity-60 md:text-sm text-[12px] truncate gap-1'>
-                  <div className='flex items-center justify-center gap-1.5'>
-                    <Clock2 className='size-4 mb-0.5' />
-                    <p>{anime.duration.split("per ep")}</p>
-                    {anime.type === "Movie"
-                      ? <>
-                        <Tv className='size-4 mb-0.5'></Tv>
-                        <p>{anime.type}</p>
-                      </>
-                      : <>
-                        <Layers className='size-4 mb-0.5' />
-                        <p>{anime.episodes ? anime.episodes : "??"}</p>
-                        <Tv className='size-4 mb-1'></Tv>
-                        <p>{anime.type}</p>
-                      </>
-                    }
+          <HoverCard key={anime.mal_id} >
+            <HoverCardContent side='left' align='start' className='w-80 bg-background/80 backdrop-blur '>
+              <div className='text-sm'>
+                <p className='text-2xl font-semibold text-primary'>{anime.title}</p>
+                <p className=' py-3'>{anime.synopsis.substring(0, 350)} ...</p>
+                <p>Genre: {anime.genres.length > 1 ? anime.genres
+                  .map<React.ReactNode>(genre => <span className='opacity-70 hover:opacity-100' key={genre.mal_id}>{genre.name}</span>)
+                  .reduce((prev, curr) => [prev, ', ', curr])
+                  : <span>??</span>}
+                </p>
+
+                <p>Tahun: {anime.aired.string}</p>
+                <p>Rating: {anime.rating}</p>
+                <p>Status: {anime.status}</p>
+              </div>
+            </HoverCardContent>
+            <Link href={`/anime/${anime.mal_id}`}>
+              <HoverCardTrigger asChild>
+                <div className='group/card bg-background flex items-center rounded hover:scale-105 ease-in-out transition-all hover:text-primary gap-2 will-change-transform h-16 w-full '>
+                  <div className='ml-2'>
+                    <p className='text-center text-3xl font-bold size-9'>{index + 1}</p>
                   </div>
-                </CardFooter>
-              </Link>
-              <HoverCardContent side='right' align='start' className='w-80 backdrop-blur'>
-                <div className='text-sm'>
-                  <p className='text-2xl font-semibold text-primary'>{anime.title}</p>
-                  <p className=' py-3'>{anime.synopsis.substring(0, 350)} ...</p>
-                  <p>Genre: {anime.genres
-                    .map<React.ReactNode>(genre => { return genre ? <span className='opacity-70 hover:opacity-100' key={genre.mal_id}>{genre.name}</span> : null })
-                    // .reduce((prev, curr) => [prev, ', ', curr])
-                  }</p>
-                  <p>Tahun: {anime.aired.string}</p>
-                  <p>Rating: {anime.rating}</p>
-                  <p>Status: {anime.status}</p>
+                  <div className='overflow-hidden rounded m-2 aspect-square'>
+                    <Image
+                      src={anime.images.webp.image_url}
+                      alt={anime.images.jpg.image_url}
+                      width={50}
+                      height={50}
+                      className="object-cover object-center"
+                      priority
+                    />
+                  </div>
+                  <p className='font-bold text-lg mr-2 truncate ...'>{anime.title.substring(0, 27)}</p>
                 </div>
-              </HoverCardContent>
-            </Card>
+              </HoverCardTrigger>
+            </Link>
           </HoverCard>
         )
       })}
-    </div >
-*/
+    </div>
+  )
+}
+
+export function AnimeCharacter({ api }: { api: ICharacter[] }) {
+  return (
+    <div>
+      {api.map((char) => {
+        return (
+          <p key={char.character.name}>{char.character.name}</p>
+        )
+      })}
+    </div>
+  )
+}

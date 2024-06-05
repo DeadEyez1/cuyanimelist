@@ -7,5 +7,4 @@ const envSchema = z.object({
   NEXTAUTH_SECRET: z.string(),
 })
 
-// eslint-disable-next-line node/prefer-global/process
 export const env = envSchema.parse(process.env)
