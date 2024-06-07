@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import authUserSession from '@/libs/auth'
+import { authUserSession } from '@/auth'
 
 export default async function userDashboard() {
   const user = await authUserSession()

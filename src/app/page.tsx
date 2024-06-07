@@ -1,7 +1,7 @@
-import { getAnimeResponse, getNestedAnimeResponse } from '@/libs/Api'
+import { getAnimeResponse, getNestedAnimeResponse } from '@/lib/Api'
 import Header from '@/components/AnimeList/Header'
 import { AnimeCard, AnimeCardHorizontal } from '@/components/AnimeList/AnimeCard'
-import { IAnimeProps } from '@/libs/types'
+import { IAnimeProps } from '@/lib/types'
 
 export default async function Home() {
   const topAnime: IAnimeProps[] = await getAnimeResponse('top/anime', 'limit=12')

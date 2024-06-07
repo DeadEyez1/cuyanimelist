@@ -1,27 +1,30 @@
 import Image from 'next/image'
-import { getAnimeCharacter, getAnimeResponse } from '@/libs/Api'
+import { getAnimeCharacter, getAnimeRecommendation, getAnimeResponse } from '@/lib/Api'
 import CollectionButton from '@/components/AnimeList/CollectionButton'
-import authUserSession from '@/libs/auth'
-import prisma from '@/libs/prisma'
+import prisma from '@/lib/prisma'
 import CommentInput from '@/components/AnimeList/CommentInput'
 import CommentBox from '@/components/AnimeList/CommentBox'
-import type { IAnimeProps, ICharacter, IUser } from '@/libs/types'
+import type { IAnimeProps, ICharacter, ICollection, IUser } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import VideoPlayer from '@/components/Utils/VideoPlayer'
-import { Bookmark, CirclePlay, Info, Play } from 'lucide-react'
-import { AnimeCharacter } from '@/components/AnimeList/AnimeCard'
+import { CirclePlay, } from 'lucide-react'
+import { AnimeCharacter, AnimeRecommendation } from '@/components/AnimeList/AnimeCard'
+import { authUserSession } from '@/auth'
+import { Separator } from '@/components/ui/separator'
 
 export default async function tempAnimePage({ params: { id } }: { params: { id: string } }) {
   const animeCharacter: ICharacter[] = await getAnimeCharacter(id)
     .then(data => data.filter((role: ICharacter) => role.role === "Main"))
+  const recommendationAnime = await getAnimeRecommendation(id)
   const anime: IAnimeProps = await getAnimeResponse(`anime/${id}`)
   const user = await authUserSession()
-  const collection = await prisma.collection.findFirst({ where: { user_email: user?.email, anime_mal_id: id } })
+  const collection = await prisma.collection.findFirst({ where: { user_email: user?.email, anime_mal_id: parseInt(id) } })
+    .then((data) => { if (!data) { return false } return true })
 
   return (
-    <div className='bg-destructive-foreground pt-10'>
+    <div className='bg-destructive-foreground flex flex-col gap-4'>
       <section className='xl:flex'>
         <div className='container gap-4'>
           <Dialog>
@@ -70,7 +73,13 @@ export default async function tempAnimePage({ params: { id } }: { params: { id: 
           <div className='lg:w-fit w-full'>
             <h3 className='text-4xl font-bold pb-2'>{anime.title}</h3>
             {user &&
-              <CollectionButton anime_mal_id={`${anime.mal_id}`} user_email={user?.email} anime_image={anime.images.webp.image_url} anime_title={anime.title} />
+              <CollectionButton
+                anime_mal_id={anime.mal_id}
+                user_email={user?.email}
+                anime_image={anime.images.webp.image_url}
+                anime_title={anime.title}
+                exist={collection}
+              />
             }
           </div>
           <p className='py-2'>{anime.synopsis}</p>
@@ -87,8 +96,18 @@ export default async function tempAnimePage({ params: { id } }: { params: { id: 
         </div>
       </section>
       <section>
-        <div className='container'>
-
+        <div>
+          <Separator className='' />
+          <div className="p-4">
+            <h3 className="font-bold text-peach text-2xl mb-4">Comments</h3>
+            {user
+              && <CommentInput username={user.name} user_email={user.email} image={user.image} anime_mal_id={anime.mal_id} anime_title={anime.title} />
+            }
+          </div>
+          <CommentBox anime_mal_id={parseInt(id)} />
+        </div>
+        <div>
+          <AnimeRecommendation api={recommendationAnime} />
         </div>
       </section>
     </div>

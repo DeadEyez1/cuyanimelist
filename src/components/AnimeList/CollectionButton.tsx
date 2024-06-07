@@ -1,45 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import type { IDatabase } from '@/libs/types'
+import { useTransition } from 'react'
+import type { ICollection } from '@/lib/types'
 import { Button } from '../ui/button'
 import { Bookmark, BookmarkMinus } from 'lucide-react'
+import { UserCollectionHandler } from '@/lib/db/UserCheck'
 
-export default function CollectionButton({ anime_mal_id, user_email, anime_image, anime_title }: IDatabase) {
-  const [isCreated, setIsCreated] = useState(false)
+interface props extends ICollection {
+  exist: boolean
+}
 
-  async function handleCollection(event: any) {
-    event.preventDefault()
+export default function CollectionButton({ anime_mal_id, user_email, anime_image, anime_title, exist }: props) {
+  const [isPending, startTransition] = useTransition()
+
+  function buttonHandler() {
     const data = { anime_mal_id, user_email, anime_image, anime_title }
-    const response = await fetch('/api/v1/collections', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-    const collection = await response.json()
-    if (collection.isCreated)
-      setIsCreated(true)
-  }
 
-  async function deleteCollection(event: any) {
-    event.preventDefault()
-    const data = { anime_mal_id, user_email, anime_image, anime_title }
-    const response = await fetch('/api/v1/collections', {
-      method: 'DELETE',
-      body: JSON.stringify(data),
+    startTransition(() => {
+      UserCollectionHandler(data)
     })
-    const collection = await response.json()
-    if (collection.isDeleted)
-      setIsCreated(false)
   }
 
   return (
     <>
-      {isCreated
-        ? <Button variant="destructive" onClick={deleteCollection}>
+      {exist
+        ? <Button variant="destructive" onClick={buttonHandler} disabled={isPending}>
           <BookmarkMinus strokeWidth={2} className='mr-2 h-4 w-4' /> Remove from Collection
         </Button>
-        // : <button type="button" onClick={handleCollection} className="px-2 py-1 bg-peach text-crust font-bold">Add to Collection</button>}
-        : <Button variant="default" onClick={handleCollection}>
+        : <Button variant="default" onClick={buttonHandler} disabled={isPending}>
           <Bookmark strokeWidth={2} className='mr-2 h-4 w-4' /> Add to Collection
         </Button>
       }

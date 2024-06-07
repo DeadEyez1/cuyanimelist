@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from '@/components/NavBar'
 import { ThemeProvider } from '@/components/Utils/Theme'
 import Footer from '@/components/Footer'
+import { Toaster } from '@/components/ui/toaster'
 
 
 const inter = Figtree({ subsets: ['latin'] })
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           enableSystem
           disableTransitionOnChange>
           <Navbar />
+          <Toaster />
           {children}
         </ThemeProvider>
         <Footer />

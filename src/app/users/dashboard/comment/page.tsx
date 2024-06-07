@@ -1,9 +1,9 @@
 import { PawPrint } from 'lucide-react'
 import Link from 'next/link'
-import authUserSession from '@/libs/auth'
-import prisma from '@/libs/prisma'
+import authUserSession from '@/lib/auth'
+import prisma from '@/lib/prisma'
 import HeaderDashboard from '@/components/Dashboard/Header'
-import { IComment } from '@/libs/types'
+import { IComment } from '@/lib/types'
 
 export default async function userComment() {
   const user = await authUserSession()

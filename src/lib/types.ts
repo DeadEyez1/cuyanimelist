@@ -1,3 +1,5 @@
+import { z } from "zod"
+
 export interface IAnimeProps {
   mal_id: number
   images: IAnimeImages
@@ -29,7 +31,7 @@ export interface IAnimeProps {
   studios: IAnimeDetail[]
 }
 
-interface IAnimeImages {
+export interface IAnimeImages {
   jpg: {
     image_url: string
     small_image_url: string
@@ -53,19 +55,20 @@ export interface IUser {
   name: string
   email: string
   image: string
+  comments?: IComment
+  collections?: ICollection
 }
 
 export interface IComment {
-  id: string
-  anime_mal_id: string
-  user_email: string
-  username: string
-  anime_title: string
-  comment: string
+  id?: string
+  username?: string
+  anime_mal_id?: number
+  anime_title?: string
+  comment?: string
 }
 
-export interface IDatabase {
-  anime_mal_id: string
+export interface ICollection {
+  anime_mal_id: number
   user_email: string
   anime_image: string | null
   anime_title: string
@@ -97,3 +100,13 @@ export interface ICharacter {
   }
   role: string
 }
+
+export const commentSchema = z.object({
+  username: z.string(),
+  user_email: z.string().email(),
+  anime_mal_id: z.number(),
+  anime_title: z.string(),
+  comment: z.string()
+    .min(3, { message: "Comment must be at least 3 Characters!." })
+    .max(255, { message: "Your comment is too long, no one gonna read it. Max character 255." }),
+})

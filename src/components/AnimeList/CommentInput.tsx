@@ -1,46 +1,60 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import type { IComment } from '@/libs/types'
+import { useState, useTransition } from 'react'
+import type { IComment } from '@/lib/types'
+import { Textarea } from '../ui/textarea'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Button } from '../ui/button'
+import { PostComment } from '@/lib/db/UserComments'
+import { toast } from '../ui/use-toast'
 
-export default function CommentInput({ anime_mal_id, user_email, username, anime_title }: IComment) {
-  const [comment, setComment] = useState('')
-  const [isCreated, setIsCreated] = useState(false)
+interface props extends IComment {
+  anime_mal_id: number
+  anime_title: string
+  username: string
+  user_email: string
+  image: string
+}
 
-  const router = useRouter()
+export default function CommentInput({ anime_mal_id, user_email, username, anime_title, image }: props) {
+  const [comment, setComment] = useState("");
+  const [isPending, startTransition] = useTransition();
 
-  function handleInput(event: any) {
-    setComment(event.target.value)
-  }
 
-  async function handlePosting(event: any) {
-    event.preventDefault()
-    const data = { anime_mal_id, user_email, comment, username, anime_title }
-    if (comment.length >= 3) {
-      const response = await fetch('/api/v1/comments', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      })
-      const postComment = await response.json()
-      if (postComment.isCreated) {
-        setIsCreated(true)
-        setComment('')
-        router.refresh()
+  function handleInput(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setComment(event.target.value);
+  };
+  async function handlePosting(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    const data = { anime_mal_id, anime_title, user_email, comment, username }
+
+    startTransition(async () => {
+      const response = await PostComment(data)
+      if (response?.error) {
+        toast({ description: response.error })
+        return;
       }
-    }
+
+      toast({ description: response.success })
+      setComment('')
+    })
   }
 
   return (
-    <div className="w-full flex flex-col gap-2">
-      {isCreated && <p>Komentar terkirim...</p>}
-      <textarea
-        onChange={handleInput}
-        value={comment}
-        placeholder="Tulis komentar..."
-        className="h-12 text-crust"
-      />
-      <button type="button" disabled={comment.length < 3} onClick={handlePosting} className="w-52 py-2 px-3 bg-peach text-crust disabled:opacity-50">Post Komentar</button>
+    <div className="flex items-start gap-4">
+      <Avatar className="w-10 h-10 border">
+        <AvatarImage src={image} alt={username} />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <Textarea
+          placeholder="Write your comment ..."
+          className="mb-2 rounded-md"
+          value={comment}
+          onChange={handleInput}
+        />
+        <Button onClick={handlePosting} disabled={isPending}>Submit</Button>
+      </div>
     </div>
   )
 }

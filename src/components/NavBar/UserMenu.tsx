@@ -1,7 +1,7 @@
 import { CircleUserRound } from "lucide-react";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import authUserSession from "@/libs/auth";
+import { authUserSession, signIn } from "@/auth";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import Link from "next/link";
 
@@ -43,8 +43,8 @@ export async function UserMenu() {
             </Link>
           </div>)
           : (<div>
-            <Link href="/api/auth/signin">
-              <DropdownMenuItem className="cursor-pointer">Log in</DropdownMenuItem>
+            <Link href='/api/auth/signin'>
+              <DropdownMenuItem className="cursor-pointer" >Log in</DropdownMenuItem>
             </Link>
           </div>)
         }

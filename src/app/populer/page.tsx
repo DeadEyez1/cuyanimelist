@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { getAnimeResponse } from '@/libs/Api'
+import { getAnimeResponse } from '@/lib/Api'
 import HeaderMenu from '@/components/Utils/HeaderMenu'
 import Pagination from '@/components/Utils/Pagination'
 import { AnimeCard } from '@/components/AnimeList/AnimeCard'
