@@ -1,12 +1,12 @@
 import type { IAnimeImages, IAnimeProps, ICharacter } from '@/lib/types'
-import { Card, CardFooter, CardTitle } from '../ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
 import { Clock2, Layers, Tv } from 'lucide-react'
 import Image from 'next/image'
 import { Separator } from '../ui/separator'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 
-// TODO add link to genre
 export function AnimeCard({ api }: { api: IAnimeProps[] }) {
   return (
     <div className='grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 grid-cols-2 gap-4 px-4'>
@@ -147,32 +147,106 @@ export function AnimeCharacter({ api }: { api: ICharacter[] }) {
 }
 
 interface IAnimeRecommendation {
-  mal_id: number
-  url: string
-  images: IAnimeImages
-  title: string
+  entry: {
+    mal_id: number
+    url: string
+    images: IAnimeImages
+    title: string
+  }
 }
 
 export function AnimeRecommendation({ api }: { api: IAnimeRecommendation[] }) {
   return (
     <div>
-      {api.map((anime) => {
-        return (
-          <div key={anime.mal_id} className='group/card bg-background flex items-center rounded hover:scale-105 ease-in-out transition-all hover:text-primary gap-2 will-change-transform h-16 w-full '>
-            <div className='overflow-hidden rounded m-2 aspect-square'>
+      <Separator />
+      <h3 className='text-xl font-bold p-2'>Recommendation:</h3>
+      <div className='grid lg:grid-cols-4 md:grid-cols-3 gap-4 px-4'>
+        {api.slice(0, 10).map((anime) => {
+          return (
+            <div className='bg-background flex rounded-lg items-center' key={anime.entry.mal_id}>
               <Image
-                src={anime.images.webp.image_url}
-                alt={anime.images.jpg.image_url}
+                src={anime.entry.images.jpg.image_url}
+                alt='...'
                 width={50}
                 height={50}
-                className="object-cover object-center"
-                priority
+                className="object-cover aspect-square m-2 rounded object-top"
               />
+              <h3 className='font-bold text-center'>{anime.entry.title}</h3>
             </div>
-            <p className='font-bold text-lg mr-2 truncate ...'>{anime.title.substring(0, 27)}</p>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
+  )
+}
+
+export function AnimeDetailCard({ anime, character }: { anime: IAnimeProps, character: ICharacter[] }) {
+  return (
+    <Card className='lg:w-80'>
+      <CardHeader className='p-4'>
+        <CardTitle>Anime Details</CardTitle>
+      </CardHeader>
+      <CardContent className='px-4 space-y-2'>
+        <div>
+          <ul className='flex-wrap [&>li]:flex [&>li]:space-x-2 [&>li>strong]:min-w-16 [&>li>p]:text-balance text-sm'>
+            <li><strong>English</strong><p>{anime.title_english}</p></li>
+            <li><strong>Japanese</strong><p>{anime.title_japanese}</p></li>
+            <li><strong>Type</strong><p>{anime.type}</p></li>
+            <li><strong>Rating</strong><p>{anime.rating}</p></li>
+            <li><strong>Score</strong><p>{anime.score}</p></li>
+            <li><strong>Aired</strong><p>{anime.aired.string}</p></li>
+            <li><strong>Status</strong><p>{anime.status}</p></li>
+            {anime.type != "Movie" &&
+              <li><strong>Episodes</strong><p>{!anime.episodes ? "???" : anime.episodes}</p></li>
+            }
+            <li><strong>Duration</strong><p>{anime.duration}</p></li>
+            <li><strong>Genres</strong>
+              <p>{anime.genres.length > 1 ? anime.genres
+                .map<React.ReactNode>(genre => <span key={genre.mal_id} className='opacity-70 hover:opacity-100 hover:cursor-pointer'>{genre.name}</span>)
+                .reduce((prev, curr) => [prev, ', ', curr])
+                : "???"
+              }</p>
+            </li>
+            <li><strong>Studio</strong>{anime.studios ? anime.studios
+              .map<React.ReactNode>(studio => <p className='opacity-70 hover:opacity-100' key={studio.mal_id}>{studio.name}</p>)
+              : <p>???</p>}
+            </li>
+            <li><strong>Producers</strong>
+              <p>{anime.producers.length > 1 ? anime.producers
+                .map<React.ReactNode>((prod) => <span className='opacity-70 hover:opacity-100 hover:cursor-pointer' key={prod.mal_id}>{prod.name}</span>)
+                .reduce((prev, curr) => [prev, ', ', curr])
+                : "???"}
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <Separator />
+          <div className='flex gap-2 [&>button]:flex [&>button]:flex-col py-2'>
+            {character.slice(0, 4).map((char) => {
+              return (
+                <TooltipProvider key={char.character.mal_id}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Image
+                        src={char.character.images.webp.image_url}
+                        alt={char.character.name}
+                        width={50}
+                        height={50}
+                        className='aspect-[9/14] rounded'
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{char.character.name}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )
+            })}
+          </div>
+          <p className='opacity-70 text-sm font-light hover:opacity-100 hover:underline cursor-pointer'>See All Character</p>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

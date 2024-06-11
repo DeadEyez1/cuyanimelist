@@ -1,6 +1,6 @@
 import { env } from './env'
-import type { IAnimeProps, ICharacter } from './types'
 
+// TODO handle the API
 export async function getAnimeResponse(resource: string, query?: string) {
   const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/${resource}?${query}`)
     .then((res) => {
@@ -9,7 +9,6 @@ export async function getAnimeResponse(resource: string, query?: string) {
     })
 
   return data.data
-  // return data.data as IAnimeProps
 }
 
 export async function getAnimeCharacter(animeId: string) {

@@ -16,6 +16,8 @@ export interface IAnimeProps {
     }
   }
   title: string
+  title_english: string
+  title_japanese: string
   type: string
   episodes: number
   status: string
@@ -52,19 +54,20 @@ interface IAnimeDetail {
 }
 
 export interface IUser {
+  id: string
   name: string
   email: string
   image: string
-  comments?: IComment
-  collections?: ICollection
 }
 
 export interface IComment {
-  id?: string
+  id?: number
   username?: string
   anime_mal_id?: number
   anime_title?: string
   comment?: string
+  User?: IUser
+  createdAt?: string
 }
 
 export interface ICollection {
@@ -102,11 +105,12 @@ export interface ICharacter {
 }
 
 export const commentSchema = z.object({
+  userId: z.string(),
   username: z.string(),
   user_email: z.string().email(),
   anime_mal_id: z.number(),
   anime_title: z.string(),
   comment: z.string()
     .min(3, { message: "Comment must be at least 3 Characters!." })
-    .max(255, { message: "Your comment is too long, no one gonna read it. Max character 255." }),
+    .max(1000, { message: "Your comment is too long, no one gonna read it. Max character 1000." }),
 })

@@ -14,19 +14,19 @@ interface props extends IComment {
   username: string
   user_email: string
   image: string
+  userId: string
 }
 
-export default function CommentInput({ anime_mal_id, user_email, username, anime_title, image }: props) {
+export default function CommentInput({ anime_mal_id, user_email, username, anime_title, image, userId }: props) {
   const [comment, setComment] = useState("");
   const [isPending, startTransition] = useTransition();
-
 
   function handleInput(event: React.ChangeEvent<HTMLTextAreaElement>) {
     setComment(event.target.value);
   };
   async function handlePosting(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    const data = { anime_mal_id, anime_title, user_email, comment, username }
+    const data = { anime_mal_id, anime_title, user_email, comment, username, userId }
 
     startTransition(async () => {
       const response = await PostComment(data)

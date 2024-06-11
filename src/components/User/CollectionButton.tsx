@@ -24,10 +24,10 @@ export default function CollectionButton({ anime_mal_id, user_email, anime_image
   return (
     <>
       {exist
-        ? <Button variant="destructive" onClick={buttonHandler} disabled={isPending}>
+        ? <Button variant="destructive" onClick={buttonHandler} disabled={isPending} className='w-full'>
           <BookmarkMinus strokeWidth={2} className='mr-2 h-4 w-4' /> Remove from Collection
         </Button>
-        : <Button variant="default" onClick={buttonHandler} disabled={isPending}>
+        : <Button variant="default" onClick={buttonHandler} disabled={isPending} className='w-full'>
           <Bookmark strokeWidth={2} className='mr-2 h-4 w-4' /> Add to Collection
         </Button>
       }

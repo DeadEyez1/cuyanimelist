@@ -16,13 +16,15 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  collections   Collection[]
+  comments      Comment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -79,15 +81,21 @@ model Collection {
   user_email   String
   anime_image  String?
   anime_title  String?
+  User         User?   @relation(fields: [userId], references: [id])
+  userId       String?
 
   @@unique([user_email, anime_mal_id])
 }
 
 model Comment {
-  id           Int    @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   anime_mal_id Int
   anime_title  String
   user_email   String
   comment      String
   username     String
+  User         User?   @relation(fields: [userId], references: [id])
+  userId       String?
+
+  createdAt DateTime @default(now())
 }
