@@ -1,11 +1,13 @@
-import type { IAnimeImages, IAnimeProps, ICharacter } from '@/lib/types'
+import type { IAnimeImages, IAnimeProps, ICharacter, IEpisodes } from '@/lib/types'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
-import { Clock2, Layers, Tv } from 'lucide-react'
+import { Clock2, Layers, Star, Tv } from 'lucide-react'
 import Image from 'next/image'
 import { Separator } from '../ui/separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
+import { AspectRatio } from '../ui/aspect-ratio'
+import { Button, buttonVariants } from '../ui/button'
 
 export function AnimeCard({ api }: { api: IAnimeProps[] }) {
   return (
@@ -24,14 +26,14 @@ export function AnimeCard({ api }: { api: IAnimeProps[] }) {
                 </p>
 
                 <p>Tahun: {anime.aired.string}</p>
-                <p>Rating: {anime.rating}</p>
+                <p>Rating: {anime.rating ? anime.rating : "?"}</p>
                 <p>Status: {anime.status}</p>
               </div>
             </HoverCardContent>
-            <Card className='group/card hover:scale-105 hover:ease-in-out hover:transition size-auto aspect-[3/4]'>
+            <Card className='group/card hover:scale-105 transition-all duration-300'>
               <Link href={`/anime/${anime.mal_id}`}>
                 <HoverCardTrigger asChild>
-                  <div className='overflow-hidden rounded-lg'>
+                  <div className='flex overflow-hidden justify-center rounded-lg'>
                     <Image
                       src={anime.images.webp.large_image_url}
                       alt={anime.images.jpg.large_image_url}
@@ -42,27 +44,18 @@ export function AnimeCard({ api }: { api: IAnimeProps[] }) {
                     />
                   </div>
                 </HoverCardTrigger>
-                <CardTitle className='md:text-base text-sm group-hover/card:text-primary group-hover/card:underline px-2 py-1 truncate group-hover/card:text-clip'>
+                <section className='flex px-3 pt-1 justify-between opacity-60 md:text-sm text-[12px] truncate gap-1'>
+                  <div className='flex items-center gap-1.5 text-xs'>
+                    <Star className='size-3' />
+                    <p>{anime.score ? anime.score : "?"}</p>
+                  </div>
+                  <div className='text-xs font-bold'>
+                    <p>{anime.rating ? anime.rating.split(" ")[0] : "?"}</p>
+                  </div>
+                </section>
+                <CardTitle className='md:text-base text-sm group-hover/card:text-primary group-hover/card:underline px-2 pb-1 line-clamp-2'>
                   {anime.title}
                 </CardTitle>
-                <CardFooter className='opacity-60 md:text-sm text-[12px] truncate gap-1'>
-                  <div className='flex items-center justify-center gap-1.5 text-xs'>
-                    <Clock2 className='size-3' />
-                    <p>{anime.duration.split("per ep")}</p>
-                    {anime.type === "Movie"
-                      ? <>
-                        <Tv className='size-3'></Tv>
-                        <p>{anime.type}</p>
-                      </>
-                      : <>
-                        <Layers className='size-3' />
-                        <p>{anime.episodes ? anime.episodes : "??"}</p>
-                        <Tv className='size-3'></Tv>
-                        <p>{anime.type}</p>
-                      </>
-                    }
-                  </div>
-                </CardFooter>
               </Link>
             </Card>
           </HoverCard>
@@ -100,13 +93,13 @@ export function AnimeCardHorizontal({ api }: { api: IAnimeProps[] }) {
                   <div className='ml-2'>
                     <p className='text-center text-3xl font-bold size-9'>{index + 1}</p>
                   </div>
-                  <div className='overflow-hidden rounded m-2 aspect-square'>
+                  <div className='overflow-hidden rounded m-2'>
                     <Image
                       src={anime.images.webp.image_url}
-                      alt={anime.images.jpg.image_url}
+                      alt={"..."}
                       width={50}
                       height={50}
-                      className="object-cover object-center"
+                      className="object-cover object-center aspect-square"
                       priority
                     />
                   </div>
@@ -123,26 +116,46 @@ export function AnimeCardHorizontal({ api }: { api: IAnimeProps[] }) {
 
 export function AnimeCharacter({ api }: { api: ICharacter[] }) {
   return (
-    <>
-      <Separator />
-      <h3 className='text-xl font-bold p-2'>Main Characters:</h3>
-      <div className='grid lg:grid-cols-4 md:grid-cols-3 gap-4 px-4'>
-        {api.map((char) => {
-          return (
-            <div className='bg-background flex rounded-lg items-center' key={char.character.mal_id}>
-              <Image
-                src={char.character.images.jpg.image_url}
-                alt='...'
-                width={50}
-                height={50}
-                className="object-cover aspect-square m-2 rounded object-top"
-              />
-              <h3 className='font-bold text-center'>{char.character.name}</h3>
-            </div>
-          )
-        })}
-      </div>
-    </>
+    <div className='flex gap-4 flex-col'>
+      <section>
+        <h3 className='text-xl font-bold'>Main Character</h3>
+        <div className='grid lg:grid-cols-4 md:grid-cols-3 gap-4 px-4'>
+          {api.filter((role) => role.role === "Main").map((char) => {
+            return (
+              <div className='bg-background flex rounded-lg items-center' key={char.character.mal_id}>
+                <Image
+                  src={char.character.images.jpg.image_url}
+                  alt='...'
+                  width={50}
+                  height={50}
+                  className="object-cover aspect-square m-2 rounded object-top"
+                />
+                <h3 className='font-bold text-center'>{char.character.name}</h3>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+      <section>
+        <h3 className='text-xl font-bold'>Other Character</h3>
+        <div className='grid lg:grid-cols-4 md:grid-cols-3 gap-4 px-4'>
+          {api.filter((role) => role.role !== "Main").map((char) => {
+            return (
+              <div className='bg-background flex rounded-lg items-center' key={char.character.mal_id}>
+                <Image
+                  src={char.character.images.jpg.image_url}
+                  alt='...'
+                  width={50}
+                  height={50}
+                  className="object-cover aspect-square m-2 rounded object-top"
+                />
+                <h3 className='font-bold text-center'>{char.character.name}</h3>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    </div>
   )
 }
 
@@ -232,8 +245,8 @@ export function AnimeDetailCard({ anime, character }: { anime: IAnimeProps, char
                         src={char.character.images.webp.image_url}
                         alt={char.character.name}
                         width={50}
-                        height={50}
-                        className='aspect-[9/14] rounded'
+                        height={80}
+                        className='rounded object-cover'
                       />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -244,9 +257,26 @@ export function AnimeDetailCard({ anime, character }: { anime: IAnimeProps, char
               )
             })}
           </div>
-          <p className='opacity-70 text-sm font-light hover:opacity-100 hover:underline cursor-pointer'>See All Character</p>
+          <Link href="#character" className='opacity-70 text-sm font-light hover:opacity-100 hover:underline'>See All Character</Link>
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+export function EpisodCard({ api }: { api: IEpisodes }) {
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      {api.data.map((eps) => {
+        return (
+          <Card key={eps.mal_id}>
+            <CardHeader>
+              <h3>Episodes {eps.mal_id}</h3>
+              <p>{eps.title}</p>
+            </CardHeader>
+          </Card>
+        )
+      })}
+    </div>
   )
 }

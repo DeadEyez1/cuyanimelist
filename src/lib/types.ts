@@ -31,6 +31,7 @@ export interface IAnimeProps {
   aired: IAired
   producers: IAnimeDetail[]
   studios: IAnimeDetail[]
+  demographics: IAnimeDetail[]
 }
 
 export interface IAnimeImages {
@@ -102,6 +103,32 @@ export interface ICharacter {
     name: string
   }
   role: string
+}
+
+export interface IEpisodes {
+  pagination: {
+    last_visible_page: number
+    has_next_page: boolean
+  }
+  data: [{
+    mal_id: number
+    title: string
+    title_japanese: string
+    title_romanji: string
+    aired: string
+    filler: boolean
+    recap: boolean
+  }]
+}
+
+interface IEpisodeDetail {
+  title_japanese: string
+  title_romanji: string
+  duration: number
+  aired: string
+  filler: boolean
+  recap: boolean
+  synopsis: string
 }
 
 export const commentSchema = z.object({

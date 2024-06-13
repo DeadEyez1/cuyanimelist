@@ -15,6 +15,12 @@ export async function getAnimeCharacter(animeId: string) {
   const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/anime/${animeId}/characters`).then(res => res.json())
   return data.data
 }
+
+export async function getAnimeOther(animeId: string, resource: string, query?: string) {
+  const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/anime/${animeId}/${resource}?${query}`).then(res => res.json())
+  return data
+}
+
 export async function getAnimeRecommendation(animeId: string) {
   const data = await fetch(`${env.NEXT_PUBLIC_API_BASE_URL}/anime/${animeId}/recommendations`).then(res => res.json())
   return data.data
